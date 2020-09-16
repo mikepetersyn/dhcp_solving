@@ -1,7 +1,6 @@
 import networkx as nx
 import scipy as sp
 from digraph_generator import *
-import sys
 
 
 class Hamiltonian:
@@ -36,7 +35,6 @@ class Hamiltonian:
                 return
             elif k == self.n - 1:
                 self.found += 1
-                print('Hamilton Cycle {}: {}'.format(self.found, self.walk + [self.walk[0]]))
                 if self.is_decision:
                     self.running = False
                     return
@@ -55,5 +53,6 @@ class Hamiltonian:
 
                 if not self.is_duplicate(k):
                     if (k < self.n - 1) or (
-                            k == self.n - 1 and self.is_adjacent(k, 0)):
+                            k == self.n - 1 and
+                            self.is_adjacent(k, 0)):
                         return

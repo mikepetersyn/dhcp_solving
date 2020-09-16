@@ -48,12 +48,21 @@ class DHCtoSAT:
                     if dimacs_dict is not None:
                         print('{}'.format(literal), end=' ')
                     else:
-                        print('{} V'.format(literal), end=' ')
+                        #print('{} V'.format(literal), end=' ')
+                        if literal[0] < 0:
+                            print('\\neg e_{' + str(literal[0]*-1) + ',' + str(literal[1]*-1) + '} \\vee', end=' ')
+                        else:
+                            print('e_{' + str(literal[0]) + ',' + str(literal[1]) + '} \\vee', end=' ')
                 else:
                     if dimacs_dict is not None:
                         print('{} 0'.format(literal))
                     else:
-                        print('{}'.format(literal))
+                        # print('{}'.format(literal))
+                        if literal[0] < 0:
+                            print('\\neg e_{' + str(literal[0] * -1) + ',' + str(literal[1] * -1) + '} \\wedge')
+                        else:
+                            print('e_{' + str(literal[0]) + ',' + str(literal[1]) + '} \\wedge')
+
 
     def plot(self):
         nx.draw(self.G, with_labels=True, font_weight='bold')
@@ -141,7 +150,31 @@ c = np.array([
     [0, 1, 0, 0, 1, 1]
 ])
 
-dhc_to_sat = DHCtoSAT(a, directed=True, dimacs=True)
+d = np.array([
+    [0, 1, 0, 1, 0, 1, 0],
+    [0, 0, 1, 0, 0, 0, 0],
+    [1, 0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0],
+    [1, 0, 0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 0, 0, 0, 0, 0]
+])
+
+e = np.array([
+    [0, 1, 0, 1, 0, 0, 0, 0, 0],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 1, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 1, 0, 0, 0, 0],
+    [0, 0, 0, 1, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 1, 0, 1],
+    [0, 0, 0, 0, 0, 1, 0, 1, 0],
+    [0, 0, 0, 0, 0, 0, 1, 0, 1],
+    [0, 0, 0, 0, 0, 1, 0, 1, 0]
+])
+
+dhc_to_sat = DHCtoSAT(e, directed=True, dimacs=True)
+#dhc_to_sat.plot()
+print(dhc_to_sat.dimacs_dict)
 dhc_to_sat.convert()
 dhc_to_sat.print_formula(dhc_to_sat.G, dhc_to_sat.formula, dhc_to_sat.dimacs_dict)
 print('--------------------')
